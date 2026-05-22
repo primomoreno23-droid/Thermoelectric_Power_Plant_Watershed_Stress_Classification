@@ -46,7 +46,3 @@ Pipfile.lock
 .Trashes
 ehthumbs.db
 Thumbs.db
-
-# Data
-data/raw/
-data/processed/*.csv
