@@ -136,18 +136,7 @@ def clean_and_format_for_simulation(df):
     else:
         df_wide['max_temp_f'] = df_wide['max_temp_f'].fillna(df_wide['mean_temp_f'] + 15.0)
 
-    # ── CONVERSIONS FOR THE SIMULATION ENGINE ──
-    # 1. Physics script requires Celsius: T_celsius = (T_fahrenheit - 32) * 5/9
-    df_wide['T_oa_celsius'] = (df_wide['max_temp_f'] - 32) * 5 / 9
-    
-    # 2. Physics script expects relative humidity as a clean 0-100 float percentage
-    df_wide['RH_oa_pct'] = df_wide['mean_rh']
-    
-    # 3. NOAA GSOY does not track barometric pressure. We calculate standard atmospheric
-    # pressure at sea level (101325 Pa) as the default baseline argument for CoolProp
-    df_wide['P_oa_pa'] = 101325.0
-
-    return df_wide[['nearest_station_id', 'year', 'T_oa_celsius', 'RH_oa_pct', 'P_oa_pa']]
+    return df_wide[['nearest_station_id', 'year', 'mean_temp_f', 'max_temp_f', 'min_temp_f']]
 
 # ── MAIN EXECUTION BRIDGE ─────────────────────────────────────────────────────
 
@@ -157,7 +146,7 @@ def main():
     REPO_ROOT = HERE.parent.parent
     
     backbone_file = REPO_ROOT / "data" / "raw" / "eia_power_plants" / "final_eia_powerplant_data_2021_2024.csv"
-    output_path = REPO_ROOT / "data" / "raw" / "noaa_weather" / "simulation_ready_weather.csv"
+    output_path = REPO_ROOT / "data" / "raw" / "noaa_weather" / "noaa_gsoy_climate_clean.csv"
     
     if not os.path.exists(backbone_file):
         print(f"CRITICAL ERROR: Could not find backbone data tracker: '{backbone_file}'")

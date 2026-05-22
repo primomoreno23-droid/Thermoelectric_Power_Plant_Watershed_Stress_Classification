@@ -23,8 +23,8 @@ The project also documents — as a methodological contribution — why individu
 │   │   ├── us_states.geojson       # US state boundaries for mapping
 │   │   └── ...
 │   ├── processed/
-│   │   ├── Pre_Lasso_Data_with_DryHybrid.csv   # Master modeling dataset (2,251 rows)
-│   │   └── pp_benchmarked.csv                  # Model output with ceilings and risk scores
+│   │   ├── Preprocessed_Power_Plant_Data.csv    # Master modeling dataset (2,251 rows)
+│   │   └── Power_Plant_Benchmarked.csv          # Model output with ceilings and risk scores
 │   └── figures/                    # All output figures
 │
 ├── notebooks/
@@ -42,6 +42,13 @@ The project also documents — as a methodological contribution — why individu
 ## Quickstart
 
 ```bash
+# Create and activate a virtual environment
+python -m venv .venv
+# On Windows (PowerShell):
+.\.venv\Scripts\activate
+# On macOS/Linux:
+# source .venv/bin/activate
+
 # Install dependencies
 pip install -r requirements.txt
 
@@ -52,13 +59,13 @@ jupyter notebook notebooks/03_spatial_risk_map.ipynb
 jupyter notebook notebooks/04_state_policy_analysis.ipynb
 ```
 
-Notebook 02 reads `Pre_Lasso_Data_with_DryHybrid.csv` and outputs `pp_benchmarked.csv`. Notebooks 03 and 04 both read from `pp_benchmarked.csv`. Run them in order.
+Notebook 02 reads `Preprocessed_Power_Plant_Data.csv` and outputs `Power_Plant_Benchmarked.csv`. Notebooks 03 and 04 both read from `Power_Plant_Benchmarked.csv`. Run them in order.
 
 ---
 
 ## Dataset
 
-The master dataset `Pre_Lasso_Data_with_DryHybrid.csv` contains **2,251 plant-year rows** across 2021–2024 after cleaning. It was assembled from six sources and joins plant-level operational data with climate observations and watershed stress scores.
+The master dataset `Preprocessed_Power_Plant_Data.csv` contains **2,251 plant-year rows** across 2021–2024 after cleaning. It was assembled from six sources and joins plant-level operational data with climate observations and watershed stress scores.
 
 | Cooling Category | Count |
 |---|---|
@@ -96,7 +103,7 @@ The master dataset `Pre_Lasso_Data_with_DryHybrid.csv` contains **2,251 plant-ye
 ### Notebook 01 — EDA & Feature Selection
 
 - Log1p-transforms `consumption_ML` (raw skewness = 4.79, post-transform ≈ −1.2)
-- VIF analysis removes collinear variables: three temperature columns → keep `mean_temp_f`; four Simulated_WUE columns → dropped
+- VIF analysis removes collinear variables: three temperature columns → keep `mean_temp_f`
 - Kruskal-Wallis tests confirm all categorical predictors significant (p < 0.001) except `year` (p = 0.31), which is excluded
 - LASSO with 5-fold cross-validation identifies surviving features: `net_gen_mwh`, `capacity_mw`, `n_cooling_systems`, `mean_temp_f`, `state_water_intensity_L_per_MWh`, `cooling_category`, `primary_fuel`
 
