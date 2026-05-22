@@ -194,4 +194,4 @@ Python 3.9+ recommended.
 
 ---
 
-*STAT 4XX Final Project — 2024/2025*
+*STAT 4XX Final Project — 2026*

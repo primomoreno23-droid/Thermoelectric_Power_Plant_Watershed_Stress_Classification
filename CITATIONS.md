@@ -33,10 +33,6 @@ Shapefiles: https://basc.pnnl.gov/guide-determining-climate-zone-county-data-fil
 
 ### Academic Literature
 
-**Lei & Masanet (2022) — Physics simulation model**
-Used for the hybrid statistical-thermodynamic simulation of WUE and PUE across U.S. data center archetypes and climate zones. Simulation code accessed at https://github.com/nuoaleon/Data-Center-Water-footprint.
-Lei, N., and E. Masanet. (2022). Climate- and technology-specific PUE and WUE estimations for U.S. data centers using a hybrid statistical and thermodynamics-based approach. *Resources, Conservation and Recycling,* 182, 106323. https://doi.org/10.1016/j.resconrec.2022.106323
-
 **Siddik, Shehabi & Marston (2021) — Benchmark spatial water footprint study**
 Referenced as the primary prior work on spatially-detailed water footprints of U.S. data centers; methodology compared against our approach.
 Siddik, Md. Abu Bakar, Arman Shehabi, and Landon Marston. (2021). The environmental footprint of data centers in the United States. *Environmental Research Letters,* 16, 064017. https://doi.org/10.1088/1748-9326/abfba1
