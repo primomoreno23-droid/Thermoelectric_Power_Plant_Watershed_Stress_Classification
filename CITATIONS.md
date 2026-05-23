@@ -29,6 +29,11 @@ Used for ASHRAE climate zone and moisture regime classification via spatial join
 Antonopoulos, C., T. Gilbride, E. Margiotta, and C. Kaltreider. 2022. *Guide to Determining Climate Zone by County: Building America and IECC 2021 Updates.* PNNL-33270. Richland, WA: Pacific Northwest National Laboratory. https://doi.org/10.2172/1893981
 Shapefiles: https://basc.pnnl.gov/guide-determining-climate-zone-county-data-files
 
+**Meta 2023 Sustainability Report**
+Meta Platforms, Inc. (2023). 2023 sustainability report. Meta Platforms, Inc. https://sustainability.fb.com/wp-content/uploads/2023/07/Meta-2023-Sustainability-Report.pdf
+
+Facility-level annual electricity consumption (MWh) for Meta Platforms owned data centers, leased facilities, and offices, 2017–2022. Transcribed from Table 2.1 of Meta Platforms, Inc. (2023). All values reported as 100% grid-sourced per the original report. Blank cells indicate facility not yet operational in that year. EU facilities (Clonee, Luleå, Odense) retained in the CSV for completeness but excluded from indirect water calculations which use U.S. state grid water intensity values.
+
 ---
 
 ### Academic Literature

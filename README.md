@@ -134,17 +134,17 @@ Where `excess_ratio` is how far above the q=0.90 ceiling actual consumption is (
 
 Aggregates plant-level risk scores to a consumption-weighted state exposure index. Includes a counterfactual estimating water savings if Open once-through cooling plants switched to Closed recirculating systems, computed from median intensity ratios (ML/MWh) between cooling categories.
 
-**Top 5 states by mean risk score:**
+**Top 5 states by consumption-weighted exposure index:**
 
-| State | Mean Risk | Total ML | Overconsumers |
+| State | Exposure Index | Total ML | Overconsumers |
 |---|---|---|---|
-| CA | 0.459 | 271,143 | 8 |
-| NV | 0.285 | 30,004 | 4 |
-| TN | 0.185 | 277,606 | 5 |
-| TX | 0.128 | 1,565,110 | 48 |
-| NM | 0.087 | 124,171 | 8 |
+| NV | 1.559 | 30,004 | 4 |
+| VA | 0.580 | 73,594 | 7 |
+| MI | 0.519 | 534,792 | 9 |
+| IL | 0.519 | 1,174,289 | 9 |
+| CA | 0.311 | 138,835 | 3 |
 
-California's mean risk score is 3.6× higher than Texas despite having 5.8× less total consumption — the composite score captures stress-adjusted risk rather than raw volume.
+Nevada's consumption-weighted exposure index is 6.9× higher than Texas (0.225) despite having 52× less total consumption — the composite score captures stress-adjusted risk rather than raw volume.
 
 ---
 
@@ -201,4 +201,4 @@ Python 3.9+ recommended.
 
 ---
 
-*STAT 4XX Final Project — 2026*
+*STAT 420 Final Project — 2026*
