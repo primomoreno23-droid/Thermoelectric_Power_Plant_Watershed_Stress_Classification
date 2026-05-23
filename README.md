@@ -52,7 +52,11 @@ python -m venv .venv
 # Install dependencies
 pip install -r requirements.txt
 
-# Run notebooks in order
+# Register the virtual environment as a Jupyter Kernel
+python -m ipykernel install --user --name=thermo_env --display-name "Python (Thermo)"
+
+# Run notebooks
+# IMPORTANT: When the notebook opens, make sure the Kernel (top right in VS Code or Jupyter) is set to "Python (Thermo)"
 jupyter notebook notebooks/01_eda_feature_selection.ipynb
 jupyter notebook notebooks/02_quantile_regression.ipynb
 jupyter notebook notebooks/03_spatial_risk_map.ipynb
