@@ -99,6 +99,7 @@
 
 % ── Utility ──────────────────────────────────────────────────
 \usepackage{parskip}
+\usepackage{graphicx}
 \setlength{\parskip}{6pt}
 \setlength{\parindent}{0pt}
 
@@ -171,7 +172,7 @@ Six sources were integrated to construct the master dataset. The U.S.\ Energy In
 
 \subsection{Study Population and Exclusion Criteria}
 
-The initial study population comprised all U.S.\ thermoelectric power plants with non-zero water consumption records in both EIA-860 and EIA-923 across the four study years, producing 2{,}251 plant-year observations. Four categories of records were excluded prior to modelling. Fifty-four plant-year rows where reported consumption exceeded reported withdrawal were removed as physically impossible~--- consumption cannot exceed gross intake for any cooling system. Three rows corresponding to Columbia Energy Center in 2023 were removed as a confirmed data reporting error, where the submitted value of 221{,}311 ML was approximately 70 times higher than the facility's values across all other study years. One row corresponding to Gary Works was removed because this industrial steel facility had been misclassified as a power plant in the source data (fuel type: PRG). Three columns~--- \texttt{T\_oa\_celsius}, \texttt{RH\_oa\_pct}, and \texttt{P\_oa\_pa}~--- were removed prior to feature selection as zero-variance constants with no predictive information. After these exclusions and removal of records with missing predictor values, 2{,}237 plant-year observations were available for model fitting.
+The initial study population comprised all U.S.\ thermoelectric power plants with non-zero water consumption records in both EIA-860 and EIA-923 across the four study years, producing 2{,}251 plant-year observations. Four categories of records were excluded prior to modelling. Fifty-four plant-year rows where reported consumption exceeded reported withdrawal were removed as physically impossible~--- consumption cannot exceed gross intake for any cooling system. Three rows corresponding to Columbia Energy Center in 2023 were removed as a confirmed data reporting error, where the submitted value of 221{,}311 ML was approximately 70 times higher than the facility's values across all other study years. One row corresponding to Gary Works was removed because this industrial steel facility had been misclassified as a power plant in the source data (fuel type: PRG). Three columns~--- \texttt{T\_oa\_celsius}, \texttt{RH\_oa\_pct}, and \texttt{P\_oa\_pa}~--- were removed prior to feature selection as zero-variance constants with no predictive information. After assembling the initial 2{,}251-observation dataset, an additional 14 plant-year rows were excluded prior to modelling due to missing covariate values (primarily incomplete temperature records from isolated weather stations), yielding a final analytical dataset of $n = 2{,}237$ plant-years available for model fitting.
 
 Zero-consumption records in the Dry-Hybrid cooling category ($n = 154$ plant-years with \texttt{consumption\_ML} $= 0$) were retained as legitimate observations rather than excluded. Air-cooled and hybrid systems are physically designed to operate with near-zero water consumption under appropriate conditions, and treating these values as missing data would introduce systematic bias in favour of water-consuming technologies. It should be noted that the four Lei \& Masanet (2022) physics simulation columns (\texttt{Simulated\_WUE\_Mean}, \texttt{Simulated\_WUE\_Peak}, \texttt{Simulated\_WUE\_Blended\_10pct}, \texttt{Simulated\_WUE\_Blended\_20pct}) were excluded from the final LASSO feature set following perfect multicollinearity detection ($\text{VIF} = \infty$). Consequently, the 249 newly added Dry-Hybrid rows that carried null values in these simulation columns had no impact on model fitting; their covariate completeness across all retained predictors was confirmed prior to inclusion.
 
@@ -261,6 +262,13 @@ Overconsumption rates differed across cooling categories (Table~\ref{tab:baselin
 
 The standardised coefficients of the $q = 0.90$ model (Figure~1) identified cooling technology encoding and log-transformed net generation as the two strongest predictors of the consumption ceiling, with coefficients of 0.726 and 0.715 respectively. Among fuel type indicators, subbituminous coal (0.491), nuclear (0.476), and bituminous coal (0.389) produced the largest positive coefficients, reflecting the systematically higher water demands of steam-cycle generation at these fuel types. Log nameplate capacity (0.147), annual mean temperature (0.141), and number of cooling systems (0.125) contributed additional positive effects. State grid water intensity (0.084) was the smallest significant continuous predictor.
 
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[width=\linewidth]{qr_coefficients.png}
+  \caption{Standardised coefficients for the $q = 0.90$ benchmark model.}
+  \label{fig:coefs}
+\end{figure}
+
 \subsection{Top Overconsumers}
 
 The most extreme overconsumers by percentage exceedance above their predicted $q = 0.90$ ceiling are shown in Table~\ref{tab:top10}. Midland Cogeneration Venture (MI, natural gas, Closed cooling) appeared in four of the top ten plant-year observations, exceeding its predicted ceiling by 1{,}243\% in 2022 and 1{,}155\% in 2024. Baldwin Energy Complex (IL, subbituminous coal, Closed cooling) exceeded its ceiling by 830\% in 2022 and 803\% in 2023, representing the largest absolute overconsumption volumes in the dataset (141{,}200 ML and 145{,}978 ML respectively). Yates (GA, natural gas, Closed cooling) appeared three times in the top ten, consistently exceeding its ceiling by 558\%--800\% across 2021--2023.
@@ -300,6 +308,13 @@ The most extreme overconsumers by percentage exceedance above their predicted $q
 Among the 218 overconsumer plant-years, composite risk scores ranged from 0.000 to 3.884, with a mean of 0.435 and a median of 0.156 (standard deviation: 0.705). The right-skewed distribution reflects the compounding effect of the two components: high-exceedance plants in low-stress basins scored modestly, while moderate-exceedance plants in the most stressed watersheds achieved the highest composite scores.
 
 Fort Churchill (NV, natural gas, Closed cooling), located in a watershed with a \texttt{bws\_raw} score of 1.147, achieved the maximum observed risk score of 3.884 in 2021 despite a percentage exceedance (338\%) considerably lower than several coal and gas plants in less stressed basins. El Centro Hybrid (CA) achieved the second-highest risk score (3.631 in 2023) due to its location in the highest-stress watershed in the dataset (\texttt{bws\_raw} $= 1.510$). The spatial distribution of composite risk scores is shown in the choropleth risk map (Figure~2), which visualises state-level mean watershed stress as a background layer and plant-level risk scores as overlaid dots scaled by consumption volume.
+
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[width=\linewidth]{risk_map_v4.png}
+  \caption{Spatial distribution of thermoelectric overconsumers overlaid on state-level watershed stress.}
+  \label{fig:riskmap}
+\end{figure}
 
 \subsection{State-Level Exposure}
 
@@ -389,14 +404,22 @@ The dominance of fuel type indicators for subbituminous coal (0.491), nuclear (0
 
 The consumption-weighted exposure index identifies Nevada, Virginia, Michigan, Illinois, and California as the five states most in need of targeted thermoelectric water efficiency oversight. These states combine overconsumption at individual facilities with varying degrees of watershed stress, creating conditions where facility-level inefficiency compounds a pre-existing supply constraint. The policy instrument with the clearest quantified impact is cooling technology modernisation: the counterfactual analysis estimates that converting all 220 Open once-through plant-years to Closed recirculating operation at median efficiency ratios would reduce Open-plant consumption by approximately 546{,}478 ML nationally~--- 28.8\% of current Open-plant annual consumption. Tennessee, Louisiana, and Alabama offer the largest absolute savings opportunities and represent logical starting points for technology incentive programmes.
 
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[width=\linewidth]{counterfactual_savings.png}
+  \caption{Estimated water savings by state under a counterfactual Open-to-Closed cooling technology modernisation policy.}
+  \label{fig:savings}
+\end{figure}
+
 The data center gap documented in this project~--- the inability to apply the same benchmark framework to digital infrastructure facilities due to the absence of facility-level IT load disclosure~--- is itself a policy finding of independent significance. The EIA administrative reporting infrastructure required to extend this analysis to data centers already exists in form: EIA-860 and EIA-923 equivalents for the data center sector would require operators to report annual facility-level electricity consumption and water withdrawal by facility, analogous to the reporting already mandated of thermoelectric generators. \citep{lei2025} confirms that this disclosure gap represents the central unresolved barrier to data center water accountability research. Mandatory facility-level reporting would enable the same quantile regression benchmark methodology demonstrated here to be applied to hyperscale data center operators within a single reporting cycle. The indirect water analysis using Meta's reported electricity consumption \citep{meta2023} demonstrates that even partial facility-level disclosure~--- electricity consumption by location, already reported voluntarily by some operators~--- is sufficient to estimate embedded water footprints and identify which grid interconnection choices create disproportionate water burdens. Operators in high water-intensity grid regions face embedded water costs up to eight times greater than operationally comparable facilities in low-intensity regions, a disparity that is currently invisible to any standard water accounting framework.
 
 \subsection{Conclusion}
 
 A quantile regression benchmark model fitted to 2{,}237 thermoelectric plant-year observations across six public data sources produces calibrated peer-group consumption ceilings at the 75th and 90th percentile, identifies 218 overconsumers (9.7\%) whose actual water consumption cannot be explained by generation volume, cooling technology, fuel type, or climate, and generates composite risk scores that reorder state-level policy priorities in ways that volume-based reporting obscures. Nevada's exposure index of 1.559~--- driven by a small number of facilities operating at extreme exceedance in one of the most water-stressed basins in the continental United States~--- illustrates precisely the type of risk that aggregate consumption statistics fail to surface. The benchmark framework is operationally complete, fully reproducible from public data, and extensible to future EIA reporting years without methodological revision. Its application to data center facilities, which embed substantial water consumption indirectly through their grid electricity demand, requires only the policy decision to mandate facility-level IT load and water withdrawal reporting~--- a disclosure requirement comparable in scope to what thermoelectric generators have provided to the EIA for decades.
 
+\textbf{Data and Code Availability:} The complete dataset, pipeline, and statistical modeling code used to generate these results are open-source and publicly available at \url{https://github.com/primomoreno23-droid/Thermoelectric_Power_Plant_Watershed_Stress_Classification}.
+
 % ── REFERENCES ───────────────────────────────────────────────
-\section*{References}
 \addcontentsline{toc}{section}{References}
 
 \begin{thebibliography}{99}
